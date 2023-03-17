@@ -3,11 +3,27 @@ import sys
 
 files = sys.argv
 
-for file in files:
-	# Get basename of file (without extension)
-	basename = path.splitext(file)[0]
-	
-	for other_file in [f for f in listdir('.') if path.isfile(f)]:
-		# Check if other file is a regular file and has the same basename (but different name)
-		if path.isfile(other_file) and path.splitext(other_file)[0] == basename and other_file != file:
-			print(other_file)
+def get_basename(file):
+	return path.splitext(file)[0]
+
+def is_regular_file(file):
+	return path.isfile(file)
+
+def has_same_basename(file, other_file):
+	return get_basename(file) == get_basename(other_file)
+
+def is_not_same_file(file, other_file):
+	return file != other_file
+
+def is_duplicate(file, other_file):
+	return is_regular_file(other_file) and has_same_basename(file, other_file) and is_not_same_file(file, other_file)
+
+def get_duplicates(file):
+	return [other_file for other_file in listdir('.') if is_duplicate(file, other_file)]
+
+def print_duplicates(file):
+	for duplicate in get_duplicates(file):
+		print(duplicate)
+
+for file in files[1:]:
+	print_duplicates(file)
