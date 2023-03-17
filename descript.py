@@ -1,7 +1,8 @@
+# utility to append stream titles to files from youtube-dl description files
 from os import path, listdir
 import sys
 
-files = sys.argv
+files = sys.argv[1:]
 
 def get_basename(file):
 	return path.splitext(file)[0]
@@ -21,9 +22,6 @@ def is_duplicate(file, other_file):
 def get_duplicates(file):
 	return [other_file for other_file in listdir('.') if is_duplicate(file, other_file)]
 
-def print_duplicates(file):
+for file in files:
 	for duplicate in get_duplicates(file):
 		print(duplicate)
-
-for file in files[1:]:
-	print_duplicates(file)
